@@ -12,7 +12,8 @@ const store = new Vuex.Store({
     globalDeviceGain: 0,
     effects: [],
     springEffect: new SpringEffect(),
-    periodicEffect: new PeriodicEffect()
+    periodicEffect: new PeriodicEffect(),
+    log: ['Application started.', 'Starting vJoy feeder in background...', 'vJoy feeder started in background.']
   },
 
   mutations: {
@@ -22,6 +23,15 @@ const store = new Vuex.Store({
 
     updatePeriodicEffect(state, message) {
       state.periodicEffect.update(message)
+    },
+
+    addLogEntry(state, message) {
+      let log = state.log
+      log.push(message)
+
+      if (log.length >= 1000) {
+        log.splice(0, 1)
+      }
     }
   }
 })

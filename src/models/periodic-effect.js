@@ -23,6 +23,10 @@ class PeriodicEffect {
       'Period': this.period
     }
   }
+
+  stop() {
+    this.isActive = false
+  }
 }
 
 export default PeriodicEffect

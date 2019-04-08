@@ -5,10 +5,11 @@
     .body
       .section
         PercentBar(label="Magnitude" :value="periodicEffect.magnitude" :max="10000")
-        
+      
+      .section
         .period
           span.label Period:
-          span.value &nbsp;{{ periodicEffect.period }}
+          span.value &nbsp;{{ periodicEffect.period }}ms
 
       Debug(:object="periodicEffect")
 </template>
@@ -28,6 +29,8 @@
 </script>
 
 <style lang="stylus" scoped>
+
+
   .label
     font-weight: bold
 </style>

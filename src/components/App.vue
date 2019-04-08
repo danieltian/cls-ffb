@@ -9,6 +9,8 @@
 
       .effect-banks
         EffectBank(v-for="effect in effects" :effectBank="effect" :key="`${effect.effectType}`")
+      
+    LogViewer
 </template>
 
 <script>
@@ -17,9 +19,10 @@
   import Header from './Header'
   import SpringEffect from './SpringEffect'
   import PeriodicEffect from './PeriodicEffect'
+  import LogViewer from './LogViewer'
 
   export default {
-    components: { Header, EffectBank, SpringEffect, PeriodicEffect },
+    components: { Header, EffectBank, SpringEffect, PeriodicEffect, LogViewer },
 
     computed: {
       ...mapState(['effects', 'springEffect', 'periodicEffect'])
@@ -34,9 +37,15 @@
     height: 100%
 
   body
+    height: 100%
     margin: 0
-    background-color: #E6E6E6
+    background-color: #eeeeee
     font-family: 'Poppins', sans-serif
+
+  #app
+    height: 100%
+    display: grid
+    grid-template-rows: min-content 1fr min-content
 
   .main-content
     margin: 2em

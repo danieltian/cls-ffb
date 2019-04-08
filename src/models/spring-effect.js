@@ -41,6 +41,10 @@ class SpringEffect {
       'Y - Dead Band': this.Y.deadBand
     }
   }
+
+  stop() {
+    this.isActive = false
+  }
 }
 
 export default SpringEffect
