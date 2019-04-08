@@ -15,7 +15,7 @@
 
     computed: {
       entries() {
-        let entries = Object.entries(this.effectBank)
+        const entries = Object.entries(this.effectBank)
         return entries
       }
     }

@@ -1,32 +1,52 @@
 <template lang="pug">
   #app
-    CenterEffect
+    Header
 
-    .effect-banks
-      EffectBank(v-for="effect in effects" :effectBank="effect" :key="`${effect.effectType}`")
+    .main-content
+      .effects
+        SpringEffect.effect(v-if="springEffect")
+        PeriodicEffect.effect(v-if="periodicEffect")
+
+      .effect-banks
+        EffectBank(v-for="effect in effects" :effectBank="effect" :key="`${effect.effectType}`")
 </template>
 
 <script>
   import { mapState } from 'vuex'
   import EffectBank from './EffectBank'
-  import CenterEffect from './CenterEffect'
+  import Header from './Header'
+  import SpringEffect from './SpringEffect'
+  import PeriodicEffect from './PeriodicEffect'
 
   export default {
-    components: { EffectBank, CenterEffect },
+    components: { Header, EffectBank, SpringEffect, PeriodicEffect },
 
     computed: {
-      ...mapState(['effects'])
+      ...mapState(['effects', 'springEffect', 'periodicEffect'])
     }
   }
 </script>
 
 <style lang="stylus">
-  #app
-    margin: 2em
+  @require '../styles/panel'
+
+  html
+    height: 100%
+
+  body
+    margin: 0
+    background-color: #E6E6E6
     font-family: 'Poppins', sans-serif
 
-  .effect-banks
+  .main-content
+    margin: 2em
+
+  .effects
     display: flex
+    align-items: flex-start
+  
+  .effect
+    margin-right: 1.5em
   
   .bank
     width: 20em

@@ -2,7 +2,22 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { HotModuleReplacementPlugin } = require('webpack')
-const { spawn, exec } = require('child_process')
+const { spawn } = require('child_process')
+
+const cssLoaderConfig = {
+  loader: 'css-loader',
+  options: { sourceMap: true }
+}
+
+const stylusLoaderConfig = {
+  loader: 'stylus-loader',
+  options: {
+    // Automatically import the following .styl files into every stylus file.
+    import: [
+      path.resolve('src', 'styles', 'colors.styl')
+    ]
+  }
+}
 
 module.exports = (env) => {
   return {
@@ -32,7 +47,7 @@ module.exports = (env) => {
       // This interesting way of starting Electron before webpack-dev-server was taken from:
       // https://blog.alexdevero.com/building-desktop-apps-electron-react/
       before() {
-        let child = spawn('electron .', { shell: true, stdio: 'inherit' })
+        const child = spawn('electron .', { shell: true, stdio: 'inherit' })
         child.on('error', (error) => console.log(error))
         child.on('close', () => process.exit(0))
       }
@@ -60,7 +75,7 @@ module.exports = (env) => {
         },
         {
           test: /\.styl(us)?$/,
-          use: ['vue-style-loader', 'css-loader', 'stylus-loader']
+          use: ['vue-style-loader', cssLoaderConfig, stylusLoaderConfig]
         },
         {
           test: /\.css$/,

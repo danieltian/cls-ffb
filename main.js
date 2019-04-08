@@ -15,9 +15,13 @@ function createWindow() {
   })
 
   window.loadURL('http://localhost:8080')
-  window.webContents.openDevTools()
 
-  window.on('closed', function () {
+  // Open the dev tools after the window finishes loading to avoid an error message.
+  window.webContents.addListener('did-frame-finish-load', () => {
+    window.webContents.openDevTools()
+  })
+
+  window.on('closed', () => {
     window = undefined
   })
 }
