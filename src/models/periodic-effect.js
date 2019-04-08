@@ -12,7 +12,6 @@ class PeriodicEffect {
     this.offset = properties.offset
     this.phase = properties.phase
     this.period = properties.period
-    this.isActive = true
   }
 
   getDebugData() {
@@ -22,6 +21,10 @@ class PeriodicEffect {
       'Phase': this.phase,
       'Period': this.period
     }
+  }
+
+  start() {
+    this.isActive = true
   }
 
   stop() {

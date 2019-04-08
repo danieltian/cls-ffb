@@ -22,7 +22,6 @@ class SpringEffect {
     axis.positiveSaturation = properties.positiveSaturation
     axis.negativeSaturation = properties.negativeSaturation
     axis.deadBand = properties.deadBand
-    this.isActive = true
   }
 
   getDebugData() {
@@ -40,6 +39,10 @@ class SpringEffect {
       'Y - Negative Saturation': this.Y.negativeSaturation,
       'Y - Dead Band': this.Y.deadBand
     }
+  }
+
+  start() {
+    this.isActive = true
   }
 
   stop() {

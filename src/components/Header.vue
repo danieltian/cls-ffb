@@ -1,7 +1,7 @@
 <template lang="pug" functional>
   #header
     .primary CLS-E FFB
-    .secondary DCS and IL:2 BoX Support for the Brunner CLS-E Base
+    .secondary DCS and IL:2 BoX support for the Brunner CLS-E Base
 </template>
 
 <style lang="stylus" scoped>

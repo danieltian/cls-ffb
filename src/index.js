@@ -25,6 +25,22 @@ const store = new Vuex.Store({
       state.periodicEffect.update(message)
     },
 
+    startSpringEffect(state) {
+      state.springEffect.start()
+    },
+
+    startPeriodicEffect(state) {
+      state.periodicEffect.start()
+    },
+
+    stopSpringEffect(state) {
+      state.springEffect.stop()
+    },
+
+    stopPeriodicEffect(state) {
+      state.periodicEffect.stop()
+    },
+
     addLogEntry(state, message) {
       let log = state.log
       log.push(message)
@@ -32,6 +48,15 @@ const store = new Vuex.Store({
       if (log.length >= 1000) {
         log.splice(0, 1)
       }
+    },
+
+    stopAllEffects(state) {
+      state.springEffect.stop()
+      state.periodicEffect.stop()
+    },
+
+    setGlobalDeviceGain(state, value) {
+      state.globalDeviceGain = value
     }
   }
 })
@@ -42,58 +67,57 @@ const server = dgram.createSocket({ type: 'udp4', reuseAddr: true })
 function processMessage(message) {
   if (message.type == 'Create New Effect Report') {
     console.log('create new effect', message)
+    store.commit('addLogEntry', JSON.stringify(message))
   }
-  // Assume this is for spring force.
   else if (message.type == 'Condition Report') {
+    // If the message has the property 'deadBand', assume that this is a spring force update.
     if (message.hasOwnProperty('deadBand')) {
       store.commit('updateSpringEffectAxis', message)
     }
     else {
       console.log('unknown message type', message)
+      store.commit('addLogEntry', 'unknown message type: ' + JSON.stringify(message))
     }
   }
   // Assume this is for constant force.
   else if (message.type == 'Constant Force Report') {
     console.log('constant force', message)
-    // let effect = state.effects.find((x) => x.effectType == 'Constant Force')
-
-    // if (!effect) {
-    //   console.log('creating constant force effect')
-    //   effect = { effectType: 'Constant Force' }
-    //   state.effects.push(effect)
-    // }
-
-    // Object.assign(effect, message)
+    store.commit('addLogEntry', 'constant force: ' + JSON.stringify(message))
   }
   // Assume this is for a periodic square force.
   else if (message.type == 'Periodic Report') {
     store.commit('updatePeriodicEffect', message)
   }
   else if (message.type == 'Effect Operation Report') {
-    console.log('effect operation', message)
-    // if (message.effectOperation == 'Effect Stop') {
-    //   // Stop only the periodic square effect.
-    //   let effect = state.effects.find((x) => x.effectType == 'Square')
-
-    //   if (effect) {
-    //     let index = state.effects.indexOf(effect)
-    //     console.log('effect stop, stopping square effect, index is ', index)
-    //     state.effects.splice(index, 1)
-    //   }
-    // }
+    if (message.effectOperation == 'Effect Start') {
+      store.commit('startSpringEffect')
+      store.commit('startPeriodicEffect')
+      store.commit('addLogEntry', 'starting spring and periodic effect')
+    }
+    else if (message.effectOperation == 'Effect Stop') {
+      store.commit('stopPeriodicEffect')
+      store.commit('addLogEntry', 'stopping periodic effect')
+    }
+    else {
+      store.commit('addLogEntry', 'effect operation report: ' + JSON.stringify(message))
+    }
   }
   else if (message.type == 'PID Device Control') {
-    console.log('pid device control', message)
-    // if (message.deviceControl == 'Device Reset') {
-    //   state.effects = []
-    // }
-    // else if (message.deviceControl == 'Stop All Effects') {
-    //   state.effects = []
-    // }
+    if (message.deviceControl == 'Device Reset') {
+      store.commit('stopAllEffects')
+      store.commit('addLogEntry', 'Device reset.')
+    }
+    else if (message.deviceControl == 'Stop All Effects') {
+      store.commit('stopAllEffects')
+      store.commit('addLogEntry', 'All effects stopped.')
+    }
+    else {
+      store.commit('addLogEntry', 'PID device control: ' + JSON.stringify(message))
+    }
   }
   else if (message.type == 'Device Gain Report') {
-    console.log('device gain', message)
-    state.globalDeviceGain = message.globalDeviceGain
+    store.commit('addLogEntry', 'Global device gain: ' + JSON.stringify(message))
+    store.commit('setGlobalDeviceGain', message.globalDeviceGain)
   }
   else {
     console.log('unknown', message)
