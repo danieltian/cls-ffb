@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.489
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vJoyUdpFeeder", "vJoyUdpFeeder\vJoyUdpFeeder.csproj", "{91B78D02-0A22-4A67-9A71-466227E16E20}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91B78D02-0A22-4A67-9A71-466227E16E20}.Debug|x64.ActiveCfg = Debug|x64
+		{91B78D02-0A22-4A67-9A71-466227E16E20}.Debug|x64.Build.0 = Debug|x64
+		{91B78D02-0A22-4A67-9A71-466227E16E20}.Release|x64.ActiveCfg = Release|x64
+		{91B78D02-0A22-4A67-9A71-466227E16E20}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F34C057-38F2-4D7C-9FBB-7A4FB224D317}
+	EndGlobalSection
+EndGlobal

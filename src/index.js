@@ -13,7 +13,9 @@ const store = new Vuex.Store({
     effects: [],
     springEffect: new SpringEffect(),
     periodicEffect: new PeriodicEffect(),
-    log: ['Application started.', 'Starting vJoy feeder in background...', 'vJoy feeder started in background.']
+    vJoyID: 1,
+    port: 5000,
+    log: []
   },
 
   mutations: {
@@ -63,9 +65,13 @@ const store = new Vuex.Store({
 
 const dgram = remote.require('dgram')
 const server = dgram.createSocket({ type: 'udp4', reuseAddr: true })
+const { spawn, exec } = remote.require('child_process')
 
 function processMessage(message) {
-  if (message.type == 'Create New Effect Report') {
+  if (message.type == 'Feeder Status') {
+    store.commit('addLogEntry', message.message)
+  }
+  else if (message.type == 'Create New Effect Report') {
     console.log('create new effect', message)
     store.commit('addLogEntry', JSON.stringify(message))
   }
@@ -124,7 +130,7 @@ function processMessage(message) {
   }
 }
 
-server.bind(5000)
+server.bind(store.state.port)
 server.on('message', (message) => {
   // Message is a Uint8 array, toString() will convert it to a char string.
   const data = JSON.parse(message.toString())
@@ -140,3 +146,5 @@ new Vue({
   store,
   render: (h) => h(App)
 })
+
+exec(`.\\vJoyUdpFeeder\\vJoyUdpFeeder\\bin\\x64\\Release\\vJoyUdpFeeder 0 ${store.state.port} ${store.state.vJoyID}`)
