@@ -27,6 +27,10 @@ const store = new Vuex.Store({
       state.periodicEffect.update(message)
     },
 
+    setPeriodicEffectType(state, effectType) {
+      state.periodicEffect.setType(effectType)
+    },
+
     startSpringEffect(state) {
       state.springEffect.start()
     },
@@ -65,15 +69,18 @@ const store = new Vuex.Store({
 
 const dgram = remote.require('dgram')
 const server = dgram.createSocket({ type: 'udp4', reuseAddr: true })
-const { spawn, exec } = remote.require('child_process')
+const { spawn } = remote.require('child_process')
 
 function processMessage(message) {
   if (message.type == 'Feeder Status') {
     store.commit('addLogEntry', message.message)
   }
   else if (message.type == 'Create New Effect Report') {
-    console.log('create new effect', message)
     store.commit('addLogEntry', JSON.stringify(message))
+
+    if (['Square', 'Sine'].includes(message.effectType)) {
+      store.commit('setPeriodicEffectType', message.effectType)
+    }
   }
   else if (message.type == 'Condition Report') {
     // If the message has the property 'deadBand', assume that this is a spring force update.
@@ -139,6 +146,7 @@ server.on('message', (message) => {
 
 window.addEventListener('beforeunload', () => {
   server.close()
+  child.kill()
 })
 
 new Vue({
@@ -147,4 +155,5 @@ new Vue({
   render: (h) => h(App)
 })
 
-exec(`.\\vJoyUdpFeeder\\vJoyUdpFeeder\\bin\\x64\\Release\\vJoyUdpFeeder 0 ${store.state.port} ${store.state.vJoyID}`)
+const child = spawn('.\\vJoyUdpFeeder\\vJoyUdpFeeder\\bin\\x64\\Release\\vJoyUdpFeeder', ['0', store.state.port, store.state.vJoyID])
+child.on('message', (message) => console.log('message from child', message))

@@ -89,11 +89,18 @@ namespace vJoyUdpFeeder
 
       while (true)
       {
-        // Clear the console when the 'c' key is pressed.
-        var key = Console.Read();
-        if (key == 'c')
+        if (IsConsoleOutputEnabled)
         {
-          Console.Clear();
+          // Clear the console when the 'c' key is pressed.
+          var key = Console.ReadKey();
+          if (key.KeyChar == 'c')
+          {
+            Console.Clear();
+          }
+        }
+        else
+        {
+          var key = Console.Read();
         }
       }
     }
@@ -126,7 +133,7 @@ namespace vJoyUdpFeeder
       dynamic response = new ExpandoObject();
 
       // Name of the effect.
-      FFBPType type = FFBPType.PT_BLKFRREP;
+      var type = FFBPType.PT_BLKFRREP;
       Joystick.Ffb_h_Type(packet, ref type);
 
       // Effect block index of the effect. If there is one, it will always be 1 due to a bug in vJoy.
@@ -265,6 +272,8 @@ namespace vJoyUdpFeeder
       }
 
       WriteLine("------------------------------");
+
+      Broadcast(response);
     }
 
     private static void Broadcast(dynamic message)

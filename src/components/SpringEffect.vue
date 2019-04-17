@@ -1,41 +1,39 @@
 <template lang="pug">
-  .panel
-    .header Spring Effect
+  Panel(header="Spring Effect" :active="springEffect.isActive")
+    .section
+      .title Center Position
+      .axis-info
+        .box
+          .ball(:style="axisPosition")
 
-    .body
-      .section
-        .title Center Position
-        .axis-info
-          .box
-            .ball(:style="axisPosition")
+        .swap-axes-checkbox
+          input(type="checkbox" id="swap-axes" v-model="isAxesSwapped")
+          label(for="swap-axes") Swap Axes
 
-          .swap-axes-checkbox
-            input(type="checkbox" id="swap-axes" v-model="isAxesSwapped")
-            label(for="swap-axes") Swap Axes
+        table
+          tr
+            td.label X:
+            td.value {{ axisPercentX.toFixed(1) }}%
+          tr
+            td.label Y:
+            td.value {{ axisPercentY.toFixed(1) }}%
 
-          table
-            tr
-              td.label X:
-              td.value {{ axisPercentX.toFixed(1) }}%
-            tr
-              td.label Y:
-              td.value {{ axisPercentY.toFixed(1) }}%
+    .section
+      .title Strength
+      PercentBar(label="X" :value="springEffect.X.positiveCoefficient" :max="10000")
+      PercentBar(label="Y" :value="springEffect.Y.positiveCoefficient" :max="10000")
 
-      .section
-        .title Strength
-        PercentBar(label="X" :value="springEffect.X.positiveCoefficient" :max="10000")
-        PercentBar(label="Y" :value="springEffect.Y.positiveCoefficient" :max="10000")
-
-      Debug(:object="springEffect")
+    Debug(:object="springEffect")
 </template>
 
 <script>
   import { mapState } from 'vuex'
+  import Panel from './Panel'
   import PercentBar from './PercentBar'
   import Debug from './Debug'
 
   export default {
-    components: { PercentBar, Debug },
+    components: { Panel, PercentBar, Debug },
 
     data() {
       return {
@@ -74,6 +72,13 @@
 </script>
 
 <style lang="stylus" scoped>
+  .header
+    display: flex
+    align-items: center
+
+    .icon
+      color: black
+
   .axis-info
     display: grid
     grid-template-columns: min-content min-content
@@ -91,7 +96,7 @@
     background-position: (@height / 2) (@width / 2)
     border-radius: 0.1em
     margin-right: 0.8em
-  
+
   // Ball inside the axis visualizer.
   .ball
     position: absolute
@@ -101,7 +106,7 @@
     border: 0.1em solid #0B619A
     border-radius: 0.2em
     transform: translate(-47%, -47%) // Needs to be 47% in order to look visually centered.
-  
+
   .swap-axes-checkbox
     font-size: 0.8em
     display: flex
@@ -116,7 +121,7 @@
 
     label, input
       cursor: pointer
-      
+
 
   table
     display: inline-block

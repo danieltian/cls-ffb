@@ -9,7 +9,7 @@
 
       .effect-banks
         EffectBank(v-for="effect in effects" :effectBank="effect" :key="`${effect.effectType}`")
-      
+
     LogViewer
 </template>
 
@@ -31,8 +31,6 @@
 </script>
 
 <style lang="stylus">
-  @require '../styles/panel'
-
   html
     height: 100%
 
@@ -53,10 +51,10 @@
   .effects
     display: flex
     align-items: flex-start
-  
+
   .effect
     margin-right: 1.5em
-  
+
   .bank
     width: 20em
     height: 15em
